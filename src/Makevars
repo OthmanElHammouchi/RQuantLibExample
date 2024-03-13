@@ -1,0 +1,2 @@
+PKG_LIBS=-L`quantlib-config --libs`
+CPPFLAGS=-I`quantlib-config --cflags`
