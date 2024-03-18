@@ -11,23 +11,63 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// rquantlib_test
-QuantLib::Date rquantlib_test();
-RcppExport SEXP _rquantlibtest_rquantlib_test() {
+// dateInDays
+QuantLib::Date dateInDays(int n);
+RcppExport SEXP _RQuantLibExample_dateInDays(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rquantlib_test());
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(dateInDays(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// yearFrac
+double yearFrac(QuantLib::Date date1, QuantLib::Date date2);
+RcppExport SEXP _RQuantLibExample_yearFrac(SEXP date1SEXP, SEXP date2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< QuantLib::Date >::type date1(date1SEXP);
+    Rcpp::traits::input_parameter< QuantLib::Date >::type date2(date2SEXP);
+    rcpp_result_gen = Rcpp::wrap(yearFrac(date1, date2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// couponDates
+std::vector<QuantLib::Date> couponDates(QuantLib::Date start, QuantLib::Date maturity, int freq);
+RcppExport SEXP _RQuantLibExample_couponDates(SEXP startSEXP, SEXP maturitySEXP, SEXP freqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< QuantLib::Date >::type start(startSEXP);
+    Rcpp::traits::input_parameter< QuantLib::Date >::type maturity(maturitySEXP);
+    Rcpp::traits::input_parameter< int >::type freq(freqSEXP);
+    rcpp_result_gen = Rcpp::wrap(couponDates(start, maturity, freq));
+    return rcpp_result_gen;
+END_RCPP
+}
+// daysBetween
+std::vector<double> daysBetween(std::vector<QuantLib::Date> dates);
+RcppExport SEXP _RQuantLibExample_daysBetween(SEXP datesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<QuantLib::Date> >::type dates(datesSEXP);
+    rcpp_result_gen = Rcpp::wrap(daysBetween(dates));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rquantlibtest_rquantlib_test", (DL_FUNC) &_rquantlibtest_rquantlib_test, 0},
+    {"_RQuantLibExample_dateInDays", (DL_FUNC) &_RQuantLibExample_dateInDays, 1},
+    {"_RQuantLibExample_yearFrac", (DL_FUNC) &_RQuantLibExample_yearFrac, 2},
+    {"_RQuantLibExample_couponDates", (DL_FUNC) &_RQuantLibExample_couponDates, 3},
+    {"_RQuantLibExample_daysBetween", (DL_FUNC) &_RQuantLibExample_daysBetween, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rquantlibtest(DllInfo *dll) {
+RcppExport void R_init_RQuantLibExample(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

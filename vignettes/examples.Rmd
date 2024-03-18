@@ -1,0 +1,87 @@
+---
+title: Using RQuantLib to automatically wrap QuantLib::Date objects
+author: Othman El Hammouchi
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Using RQuantLib to automatically wrap QuantLib::Date objects}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+library(RQuantLibExample)
+```
+
+This vignette illustrates how RQuantLib can be used to automatically translate (vectors of) QuantLib::Date objects back and forth between C++ and R.
+
+## Returning a date
+
+`dateInDays` takes in an integer `n` and returns the date `n` days from today.
+
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+QuantLib::Date dateInDays(int n) {
+    QuantLib::Date today = QuantLib::Date::todaysDate();
+    QuantLib::Date res = today + n;
+    return res;
+}
+```
+
+```{r}
+Sys.Date()
+dateInDays(5)
+```
+
+## Accepting dates
+
+`yearFrac` takes in two dates and returns the year fraction between them according to the Act/Act ISDA convention.
+
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+double yearFrac(QuantLib::Date date1, QuantLib::Date date2) {
+    QuantLib::DayCounter convention =
+        QuantLib::ActualActual(QuantLib::ActualActual::ISDA);
+    double res = convention.yearFraction(date1, date2);
+    return res;
+}
+```
+
+```{r}
+yearFrac(Sys.Date(), as.Date("2024-12-31"))
+``` 
+
+## Returning a vector of dates
+
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+std::vector<QuantLib::Date> couponDates(QuantLib::Date start, QuantLib::Date maturity, QuantLib::Frequency freq) {
+    QuantLib::Schedule schedule =
+        QuantLib::MakeSchedule()
+            .from(start)
+            .to(maturity)
+            .withCalendar(QuantLib::TARGET())
+            .withConvention(QuantLib::BusinessDayConvention::ModifiedFollowing)
+            .withFrequency(freq);
+    return schedule.dates();
+}
+```
+
+```{r}
+couponDates(Sys.Date(), as.Date("2024-12-31"), 2)
+``` 
+
+## Accepting a vector of dates
+
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+std::vector<double> daysBetween(std::vector<QuantLib::Date> dates) {
+    std::vector<double> res(dates.size() - 1);
+    for (int i = 1; i < dates.size(); i++) {
+        res[i - 1] = dates[i] - dates[i - 1];
+    }
+    return res;
+}
+```
+
+```{r}
+daysBetween(as.Date(c(Sys.Date(), "2024-12-31", "2025-7-17")))
+``` 

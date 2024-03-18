@@ -1,11 +1,15 @@
-Package: rquantlibtest
+Package: RQuantLibExample
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Example client package for RQuantLib
 Version: 1.0
 Date: 2024-03-13
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full sentences.
+Author: Othman El Hammouchi
+Maintainer: Othman El Hammouchi <othman.el.hammouchi@protonmail.com>
+Description: Illustrates how to use RQuantLib from an R package.
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.12), RQuantLib 
+Suggests: knitr, rmarkdown
 LinkingTo: Rcpp, RQuantLib 
+RoxygenNote: 7.2.3
+Encoding: UTF-8
+VignetteBuilder: knitr
